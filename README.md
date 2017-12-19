@@ -1,0 +1,2 @@
+# OpenMP-bench
+OpenMP Benchmarks
