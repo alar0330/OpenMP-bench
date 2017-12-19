@@ -1,0 +1,9 @@
+# GIT ignore files
+bin/
+*.backup
+*.exe
+*.bin
+*~
+*.out
+.vs/*
+*.mod
