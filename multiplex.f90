@@ -161,7 +161,7 @@ contains
         
         call trpose(A, AT, n)
         
-!$OMP PARALLEL PRIVATE(i,j,k,dot) SHARED(A,B,C)
+!$OMP PARALLEL PRIVATE(i,j,k,dot) SHARED(AT,B,C)
 !$OMP DO
                 
         do i = 1, n

@@ -63,8 +63,9 @@ do i = 1, benchmax
 end do
 
 print *,
+print *, '------------------------------------------------'
 print *, 'RESULTS OF BENCHMARK:'
-print *, '---------------------'
+print *, '------------------------------------------------'
 
 print *, '[gemm]      :', sum(results(1, :)) / benchmax, ' sec'
 print *, '[gemm_omp]  :', sum(results(2, :)) / benchmax, ' sec'
