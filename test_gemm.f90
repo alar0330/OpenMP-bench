@@ -8,11 +8,11 @@ use multiplex
 
 implicit none
 integer, parameter:: d=kind(0.d0) 
-integer, parameter :: n = 512, benchmax = 10
+integer, parameter :: n = 1024, benchmax = 10
 integer :: i, j
 real(d) :: dtime, omp_get_wtime
 logical :: verbose = .false.
-real :: results(4, benchmax)
+real(d) :: results(4, benchmax)
 
 real :: A(n,n) = 0.0
 real :: B(n,n) = 0.0
@@ -63,9 +63,9 @@ do i = 1, benchmax
 end do
 
 print *,
-print *, '------------------------------------------------'
-print *, 'RESULTS OF BENCHMARK:'
-print *, '------------------------------------------------'
+print '(48("-"))',
+print "('RESULTS OF BENCHMARK (', I0 , ' x ', I0 , '):')", N, N
+print '(48("-"))',
 
 print *, '[gemm]      :', sum(results(1, :)) / benchmax, ' sec'
 print *, '[gemm_omp]  :', sum(results(2, :)) / benchmax, ' sec'
