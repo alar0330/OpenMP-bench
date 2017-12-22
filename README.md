@@ -10,7 +10,7 @@ Setup:
 >> gfortran -Wall -fopenmp -O0 -o test_gemm.exe multiplex.f90 test_gemm.f90
 ```
 
-Benchmark:
+Benchmark (single precision):
 ```
 ------------------------------------------------
  RESULTS OF BENCHMARK (256 x 256):
