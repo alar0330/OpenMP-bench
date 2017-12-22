@@ -8,9 +8,20 @@ make0:
 	gfortran -o openmp_bench.exe -Wall -pedantic -O0 -fopenmp \
 	-L$(libdir)/ -lblas \
 	$(src90)/multiplex.f90 $(src90)/test_gemm.f90 $(lapack)
+	
 run0:
 	gfortran -o openmp_bench.exe -Wall -pedantic -O0 -fopenmp \
 	$(src90)/multiplex.f90 $(src90)/test_gemm.f90 $(lapack) && openmp_bench.exe
+	
+make3:
+	gfortran -o openmp_bench.exe -Wall -pedantic -O3 -fopenmp \
+	-L$(libdir)/ -lblas \
+	$(src90)/multiplex.f90 $(src90)/test_gemm.f90 $(lapack)
+	
+run3:
+	gfortran -o openmp_bench.exe -Wall -pedantic -O3 -fopenmp \
+	$(src90)/multiplex.f90 $(src90)/test_gemm.f90 $(lapack) && openmp_bench.exe
+	
 clean:
 	del multiplex.mod openmp_bench.exe
 # End of the makefile
