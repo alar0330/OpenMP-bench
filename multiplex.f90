@@ -18,6 +18,8 @@
 module multiplex
 implicit none
 
+integer, parameter, private :: d=kind(0.d0) 
+
 contains
     subroutine trpose(A, B, n)
     
@@ -27,8 +29,8 @@ contains
     
         integer :: i,j
         integer, intent(in) :: n
-        real, intent(out) :: B(n*n)
-        real, intent(in) :: A(n*n)
+        real(d), intent(out) :: B(n*n)
+        real(d), intent(in) :: A(n*n)
                 
         do i = 1, n
             do j = 1, n
@@ -45,10 +47,10 @@ contains
     !-------------------------------------
     
         integer, intent(in) :: n
-        real, intent(in)    :: A(n*n), B(n*n)
-        real, intent(out)   :: C(n*n)
+        real(d), intent(in)    :: A(n*n), B(n*n)
+        real(d), intent(out)   :: C(n*n)
         integer :: i, j, k
-        real :: dot
+        real(d) :: dot
         
         do i = 1, n
             do j = 1, n
@@ -74,10 +76,10 @@ contains
     !-------------------------------------
     
         integer, intent(in) :: n
-        real, intent(in)    :: A(n*n), B(n*n)
-        real, intent(out)   :: C(n*n)
+        real(d), intent(in)    :: A(n*n), B(n*n)
+        real(d), intent(out)   :: C(n*n)
         integer :: i, j, k
-        real :: dot
+        real(d) :: dot
         
 !$OMP PARALLEL PRIVATE(i,j,k,dot) SHARED(A,B,C)
 !$OMP DO
@@ -111,12 +113,12 @@ contains
     !---------------------------------------------
     
         integer, intent(in) :: n
-        real, intent(in)    :: A(n*n), B(n*n)
-        real, intent(out)   :: C(n*n)
+        real(d), intent(in)    :: A(n*n), B(n*n)
+        real(d), intent(out)   :: C(n*n)
         integer :: i, j, k
-        real :: dot
+        real(d) :: dot
         !real, allocatable :: AT(:)
-        real :: AT(n*n)
+        real(d) :: AT(n*n)
         
         !allocate(AT(n*n))
         
@@ -150,12 +152,12 @@ contains
     !---------------------------------------------
     
         integer, intent(in) :: n
-        real, intent(in)    :: A(n*n), B(n*n)
-        real, intent(out)   :: C(n*n)
+        real(d), intent(in)    :: A(n*n), B(n*n)
+        real(d), intent(out)   :: C(n*n)
         integer :: i, j, k
-        real :: dot
+        real(d) :: dot
         !real, allocatable :: AT(:)
-        real :: AT(n*n)
+        real(d) :: AT(n*n)
         
         !allocate(AT(n*n))
         
