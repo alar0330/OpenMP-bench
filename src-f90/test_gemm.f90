@@ -8,7 +8,7 @@ use multiplex
 
 implicit none
 integer, parameter:: p=kind(0.d0) 
-integer, parameter :: n = 1024, benchmax = 5
+integer, parameter :: n = 512, benchmax = 5
 integer :: i, j
 real(p) :: dtime, omp_get_wtime
 logical :: dbug = .false.
@@ -27,7 +27,7 @@ do i = 1,n
 end do
 
 !do i = 1,n
-!    B(i,i) = 2.0
+!    B(i,i) = 1.0
 !end do
 
 print '(A20, I4, A3, I4)', 'Dims of A are: ', size(A, 1), ' x ', size(A, 2)

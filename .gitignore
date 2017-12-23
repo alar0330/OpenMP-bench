@@ -1,5 +1,7 @@
 # GIT ignore files
-bin/
+_old_singlePrecision/
+lib/
+out/
 *.backup
 *.exe
 *.bin
