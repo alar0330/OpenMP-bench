@@ -1,5 +1,11 @@
 # OpenMP-bench
 
-OpenMP Benchmarks of matrix multiplication for C++/Fortran.
-
-Comparison to Reference BLAS included (netlib.org/blas/).
+SHORT:
+ - OpenMP Benchmarks of matrix multiplication for C++/Fortran.
+ - C-Bindings for Fortran subroutines
+ - Comparison to Reference BLAS included (netlib.org/blas/).
+ 
+COMPILE & RUN:
+```
+make run
+```
