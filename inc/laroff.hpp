@@ -13,6 +13,7 @@
 *     
 *---------------------------------------------------------**/
 
+#pragma once
 
 template <typename T>
 void trpose(T *A, T *B, int n) {
