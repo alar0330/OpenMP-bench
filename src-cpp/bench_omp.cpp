@@ -131,6 +131,10 @@ int main() {
     printf(" - NUM_THREADS = %d\n", omp_get_num_threads());
     printf(" - Reference BLAS used\n");
     printf("---------------------------------------\n");
+    
+    delete[] A;
+    delete[] B;
+    delete[] C;
 
     return 0;
 }
