@@ -58,7 +58,7 @@ int main() {
       
       printf("\n---- Benchrun: %d\n", j+1);
 
-      // Natice C++ calls
+      // Native C++ calls
       dtime = omp_get_wtime();
       gemm<Real>(A,B,C, N);
       dtime = omp_get_wtime() - dtime;
