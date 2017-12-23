@@ -28,7 +28,4 @@ $(outdir)/multiplex.o: $(src90)/multiplex.f90
 	$(F90) $(OPTFLAG) -o $@ -c $< $(OMPFLAG) -cpp -DCBINDING
 	
 clean:
-#	del multiplex.mod openmp_bench.exe
-
-#
-# -- End of the makefile
+#	del $(TODO)
