@@ -40,22 +40,20 @@ TEST(F90TestSuiteGEMM, boostStaticAllGEMM) {
     for(int j = 0; j < N; j++)
       EXPECT_DOUBLE_EQ(UC(i,j), C[i][j]);
   //  
-  /*
-  fgemm_omp(&A[0][0], &B[0][0], &C[0][0], N);
+  fgemm_omp((double*)B, (double*)A, (double*)C, &N);
   for(int i = 0; i < N; i++)
     for(int j = 0; j < N; j++)
       EXPECT_DOUBLE_EQ(UC(i,j), C[i][j]);
   //  
-  fgemmT(&A[0][0], &B[0][0], &C[0][0], N);
+  fgemmT((double*)B, (double*)A, (double*)C, &N);
   for(int i = 0; i < N; i++)
     for(int j = 0; j < N; j++)
       EXPECT_DOUBLE_EQ(UC(i,j), C[i][j]);
   //  
-  fgemmT_omp(&A[0][0], &B[0][0], &C[0][0], N);
+  fgemmT_omp((double*)B, (double*)A, (double*)C, &N);
   for(int i = 0; i < N; i++)
     for(int j = 0; j < N; j++)
       EXPECT_DOUBLE_EQ(UC(i,j), C[i][j]);
-  */
 }
 
 TEST(F90TestSuiteGEMM, boostStaticFlattenMM) {
