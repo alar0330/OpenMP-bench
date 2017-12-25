@@ -3,19 +3,10 @@
 #include <array>
 #include <numeric>
 #include "../inc/laroff.hpp"
+#include "../inc/multiplex.hpp"
 
 using std::array;
 using std::accumulate;
-
-// Fortran-bindings
-extern "C" {
-  void fgemm(double* A, double* B, double* C, const int* n);
-  void fgemm_omp(double* A, double* B, double* C, const int* n);
-  void fgemmT(double* A, double* B, double* C, const int* n);
-  void fgemmT_omp(double* A, double* B, double* C, const int* n);
-  void fdgemm_blas(double* A, double* B, double* C, const int* n);
-}
-
 
 int main() {
   
@@ -36,7 +27,7 @@ int main() {
     // Benchmark settings:
     using Real = double;
     const int N_THREADS = 4;
-    const int N = 1024, REP = 2;
+    const int N = 3, REP = 2;
     
     double dtime = 0.0;
     array<array<double, REP>, MAXTESTS> res;
@@ -46,8 +37,8 @@ int main() {
     Real *C = new Real[N*N];
     
     for(int i=0; i<N*N; i++) {
-      A[i] = rand()/RAND_MAX; 
-      B[i] = rand()/RAND_MAX;
+      A[i] = rand()/double(RAND_MAX); 
+      B[i] = 0.95 * A[i];
     }
     
     omp_set_num_threads(N_THREADS); 

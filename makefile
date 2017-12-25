@@ -1,31 +1,55 @@
 # OpenMP-bench: makefile
 #
 
+# Googletest path and lib
+GTEST_PATH = ${GOOGLE_TEST_PATH}
+GTEST_LIB = gtest
+
+# Compiler settings
 F90 = gfortran
 CXX = g++
 WFLAGS = -Wall -pedantic
 OMPFLAG = -fopenmp
 OPTFLAG = -O3
+GTESTFLAG = -L$(GTEST_PATH) -l$(GTEST_LIB) -lpthread
 
+# Directory settings
 src90 = src-f90
 src++ = src-cpp
 inc++ = inc
 libdir = lib
 outdir = out
-lapack = $(libdir)/libblas.lib $(libdir)/liblapack.lib
+testdir = test
+
+# LAPACK/BLAS settings 
+lapack = $(libdir)/libblas.lib -L$(libdir)/ -lblas
+
+# Phonies
+.PHONY = test
+.PHONY = run
+.PHONY = bin
+.PHONY = clean
 
 run: bin
-	cfort.exe
+	bench_omp.exe
 	
 bin: $(outdir)/bench_omp.o $(outdir)/multiplex.o
-	$(CXX) $(WFLAGS) -o cfort.exe $(outdir)/bench_omp.o $(outdir)/multiplex.o \
-	$(OMPFLAG) $(lapack) -L$(libdir)/ -lblas -lgfortran
+	$(CXX) $(WFLAGS) -o bench_omp.exe $^ \
+	$(OMPFLAG) $(lapack) -lgfortran
 	
-$(outdir)/bench_omp.o: $(src++)/bench_omp.cpp $(inc++)/laroff.hpp 
+$(outdir)/bench_omp.o: $(src++)/bench_omp.cpp $(inc++)/laroff.hpp $(inc++)/multiplex.hpp 
 	$(CXX) $(OPTFLAG) -o $@ -c $< $(OMPFLAG)
 	
 $(outdir)/multiplex.o: $(src90)/multiplex.f90
 	$(F90) $(OPTFLAG) -o $@ -c $< $(OMPFLAG) -cpp -DCBINDING
 	
+test: test.exe
+	
+test.exe: $(outdir)/test_main.o $(outdir)/multiplex.o
+	$(CXX) -o $@ $^ $(GTESTFLAG) $(OMPFLAG) $(lapack) -lgfortran
+	
+$(outdir)/test_main.o: $(testdir)/test_main.cpp
+	$(CXX) -c $< -o $@ $(WFLAGS) $(OMPFLAG)
+	
 clean:
-#	del $(TODO)
+	del *.exe *.mod $(outdir)\*.o
