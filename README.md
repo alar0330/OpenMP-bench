@@ -10,3 +10,8 @@ COMPILE & RUN:
 ```
 make run
 ```
+
+COMPILE & TEST:
+```
+make test
+```
