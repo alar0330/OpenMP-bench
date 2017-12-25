@@ -26,10 +26,12 @@ lapack = $(libdir)/libblas.lib -L$(libdir)/ -lblas
 
 # Phonies
 .PHONY = test
+.PHONY = unit
 .PHONY = run
 .PHONY = bin
 .PHONY = clean
 
+# Compilation: Benchmarks
 run: bin
 	bench_omp.exe
 	
@@ -43,10 +45,12 @@ $(outdir)/bench_omp.o: $(src++)/bench_omp.cpp $(inc++)/laroff.hpp $(inc++)/multi
 $(outdir)/multiplex.o: $(src90)/multiplex.f90
 	$(F90) $(OPTFLAG) -o $@ -c $< $(OMPFLAG) -cpp -DCBINDING
 	
-test: test.exe
+# Compilation: Unit Tests	
+test: unit
+	test.exe
 	
-test.exe: $(outdir)/test_main.o $(outdir)/multiplex.o
-	$(CXX) -o $@ $^ $(GTESTFLAG) $(OMPFLAG) $(lapack) -lgfortran
+unit: $(outdir)/test_main.o $(outdir)/multiplex.o
+	$(CXX) -o test.exe $^ $(GTESTFLAG) $(OMPFLAG) $(lapack) -lgfortran
 	
 $(outdir)/test_main.o: $(testdir)/test_main.cpp
 	$(CXX) -c $< -o $@ $(WFLAGS) $(OMPFLAG)
