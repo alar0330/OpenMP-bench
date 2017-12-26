@@ -32,14 +32,13 @@ run: bin
 	bench_omp.exe
 	
 bin: $(outdir)/bench_omp.o $(outdir)/multiplex.o
-	$(CXX) $(WFLAGS) -o bench_omp.exe $^ \
-	$(OMPFLAG) $(lapack) -lgfortran
+	$(CXX) -o bench_omp.exe $^ $(OMPFLAG) $(lapack) -lgfortran
 	
 $(outdir)/bench_omp.o: $(src++)/bench_omp.cpp $(inc++)/laroff.hpp $(inc++)/multiplex.hpp 
-	$(CXX) $(OPTFLAG) -o $@ -c $< $(OMPFLAG)
+	$(CXX) $(OPTFLAG) $(WFLAGS) -o $@ -c $< $(OMPFLAG)
 	
 $(outdir)/multiplex.o: $(src90)/multiplex.f90
-	$(F90) $(OPTFLAG) -o $@ -c $< $(OMPFLAG) -cpp -DCBINDING
+	$(F90) $(OPTFLAG) $(WFLAGS) -o $@ -c $< $(OMPFLAG) -cpp -DCBINDING
 	
 # Compilation: Unit Tests	
 test: unit

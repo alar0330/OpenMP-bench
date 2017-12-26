@@ -27,7 +27,7 @@ int main() {
     // Benchmark settings:
     using Real = double;
     const int N_THREADS = 4;
-    const int N = 3, REP = 2;
+    const int N = 512, REP = 5;
     
     double dtime = 0.0;
     array<array<double, REP>, MAXTESTS> res;
