@@ -25,11 +25,7 @@ testdir = test
 lapack = $(libdir)/libblas.lib -L$(libdir)/ -lblas
 
 # Phonies
-.PHONY = test
-.PHONY = unit
-.PHONY = run
-.PHONY = bin
-.PHONY = clean
+.PHONY = test unit run bin clean
 
 # Compilation: Benchmarks
 run: bin
