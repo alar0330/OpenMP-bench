@@ -9,9 +9,12 @@ GTEST_LIB = gtest
 F90 = gfortran
 CXX = g++
 WFLAGS = -Wall -pedantic
-OMPFLAG = -fopenmp
-OPTFLAG = -O3
-GTESTFLAG = -L$(GTEST_PATH) -l$(GTEST_LIB) -lpthread
+OMPFLAGS = -fopenmp
+OPTFLAGS = -O3
+GTESTFLAGS = -L$(GTEST_PATH) -l$(GTEST_LIB) -lpthread
+
+# Profiling Setting
+PROFLAGS =
 
 # Directory settings
 src90 = src-f90
@@ -32,23 +35,24 @@ run: bin
 	bench_omp.exe
 	
 bin: $(outdir)/bench_omp.o $(outdir)/multiplex.o
-	$(CXX) -o bench_omp.exe $^ $(OMPFLAG) $(lapack) -lgfortran
+	$(CXX) -o bench_omp.exe $^ $(OMPFLAGS) $(lapack) $(PROFLAGS) -lgfortran
 	
 $(outdir)/bench_omp.o: $(src++)/bench_omp.cpp $(inc++)/laroff.hpp $(inc++)/multiplex.hpp 
-	$(CXX) $(OPTFLAG) $(WFLAGS) -o $@ -c $< $(OMPFLAG)
+	$(CXX) $(OPTFLAGS) $(WFLAGS) -o $@ -c $< $(OMPFLAGS) $(PROFLAGS)
 	
 $(outdir)/multiplex.o: $(src90)/multiplex.f90
-	$(F90) $(OPTFLAG) $(WFLAGS) -o $@ -c $< $(OMPFLAG) -cpp -DCBINDING
+	$(F90) $(OPTFLAGS) $(WFLAGS) -o $@ -c $< $(OMPFLAGS) $(PROFLAGS) -cpp -DCBINDING
 	
 # Compilation: Unit Tests	
 test: unit
 	test.exe
 	
 unit: $(outdir)/test_main.o $(outdir)/multiplex.o
-	$(CXX) -o test.exe $^ $(GTESTFLAG) $(OMPFLAG) $(lapack) -lgfortran
+	$(CXX) -o test.exe $^ $(GTESTFLAGS) $(OMPFLAGS) $(lapack) -lgfortran
 	
-$(outdir)/test_main.o: $(testdir)/test_main.cpp
-	$(CXX) -c $< -o $@ $(WFLAGS) $(OMPFLAG)
-	
+$(outdir)/test_main.o: $(testdir)/test_main.cpp $(testdir)/test_cpp.cpp $(testdir)/test_f90.cpp
+	$(CXX) -c $< -o $@ $(WFLAGS) $(OMPFLAGS)
+
+# Clean up
 clean:
-	del *.exe *.mod $(outdir)\*.o
+	del *.exe *.mod $(outdir)\*.o *.out

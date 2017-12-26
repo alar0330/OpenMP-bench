@@ -15,6 +15,7 @@
 *
 *-------------------------------------------------------**/
 
+
 TEST(CppTestSuiteTranspose, doubleOneDynamic) {
   
   // Init
@@ -39,9 +40,8 @@ TEST(CppTestSuiteTranspose, doubleNineDynamic) {
   // Test
   trpose<double>(B, BT, N);
   const double BX[9] = {100, 400, 700, 200, 500, 800, 300, 600, 900};
-  for(int i = 0; i < 9; i++) {
+  for(int i = 0; i < 9; i++)
     EXPECT_DOUBLE_EQ(BX[i], BT[i]);
-  }
   
   // Clean up
   delete[] B; delete[] BT;
@@ -57,9 +57,8 @@ TEST(CppTestSuiteTranspose, floatNineDynamic) {
   // Test
   trpose<float>(C, CT, N);
   const float CX[3] = {10, 50, 90};
-  for(int i = 0; i < 3; i++) {
+  for(int i = 0; i < 3; i++)
     EXPECT_FLOAT_EQ(CX[i], CT[i*N + i]);
-  }
    
   // Clean up
   delete[] C; delete[] CT;
@@ -81,9 +80,9 @@ TEST(CppTestSuiteTranspose, float2KDynamic) {
   for(int i = 0; i < N; i++) {
     for(int j = 0; j < N; j++) {
       if(i == j)
-        EXPECT_FLOAT_EQ(66.66, DT[i*N + j]);
+        ASSERT_FLOAT_EQ(66.66, DT[i*N + j]);
       else
-        EXPECT_FLOAT_EQ(33.33, DT[i*N + j]);
+        ASSERT_FLOAT_EQ(33.33, DT[i*N + j]);
     }
   }
    
@@ -108,6 +107,7 @@ TEST(CppTestSuiteTranspose, double2DDynamic) {
   }
 }
 
+
 TEST(CppTestSuiteTranspose, boostDynamic) {
   
   using namespace boost::numeric::ublas;
@@ -131,17 +131,16 @@ TEST(CppTestSuiteTranspose, boostDynamic) {
   MT = trans(M);
   for(int i = 0; i < N; i++)
     for(int j = 0; j < N; j++)
-      EXPECT_DOUBLE_EQ(MT(i,j), FT[i][j]);
+      ASSERT_DOUBLE_EQ(MT(i,j), FT[i][j]);
 }
 
-TEST(CppTestSuiteGEMM, boostStaticAllGEMM) {
-  
-  using namespace boost::numeric::ublas;
+
+TEST(CppTestSuiteGEMM, boostStatic_gemm) {
   
   // Init
   const int N = 10;
   double A[N][N], B[N][N], C[N][N];
-  matrix<double> UA(N,N), UB(N,N), UC(N,N);
+  boost::numeric::ublas::matrix<double> UA(N,N), UB(N,N), UC(N,N);
   //
   for(int i = 0; i < N; i++) {
     for(int j = 0; j < N; j++) {
@@ -151,27 +150,95 @@ TEST(CppTestSuiteGEMM, boostStaticAllGEMM) {
       UB(i, j) = B[i][j];
     }
   }
-  
-  // Tests
+
+  // Reference
   UC = prod(UA, UB);
-  //
+  
+  // Test
   gemm<double>((double*)A, (double*)B, (double*)C, N);
   for(int i = 0; i < N; i++)
     for(int j = 0; j < N; j++)
-      EXPECT_DOUBLE_EQ(UC(i,j), C[i][j]);
-  //  
+      ASSERT_DOUBLE_EQ(UC(i,j), C[i][j]);
+    
+}
+
+TEST(CppTestSuiteGEMM, boostStatic_gemm_omp) {
+  
+  // Init
+  const int N = 10;
+  double A[N][N], B[N][N], C[N][N];
+  boost::numeric::ublas::matrix<double> UA(N,N), UB(N,N), UC(N,N);
+  //
+  for(int i = 0; i < N; i++) {
+    for(int j = 0; j < N; j++) {
+      A[i][j] = rand()/double(RAND_MAX);
+      B[i][j] = A[i][j] + 10 * i/double(1+j);
+      UA(i, j) = A[i][j];
+      UB(i, j) = B[i][j];
+    }
+  }
+
+  // Reference
+  UC = prod(UA, UB);
+
+  // Test
   gemm_omp<double>((double*)A, (double*)B, (double*)C, N);
   for(int i = 0; i < N; i++)
     for(int j = 0; j < N; j++)
-      EXPECT_DOUBLE_EQ(UC(i,j), C[i][j]);
-  //  
+      ASSERT_DOUBLE_EQ(UC(i,j), C[i][j]);
+    
+}
+
+TEST(CppTestSuiteGEMM, boostStatic_gemmT) {
+  
+  // Init
+  const int N = 10;
+  double A[N][N], B[N][N], C[N][N];
+  boost::numeric::ublas::matrix<double> UA(N,N), UB(N,N), UC(N,N);
+  //
+  for(int i = 0; i < N; i++) {
+    for(int j = 0; j < N; j++) {
+      A[i][j] = rand()/double(RAND_MAX);
+      B[i][j] = A[i][j] + 10 * i/double(1+j);
+      UA(i, j) = A[i][j];
+      UB(i, j) = B[i][j];
+    }
+  }
+
+  // Reference
+  UC = prod(UA, UB);
+  
+  // Test
   gemmT<double>((double*)A, (double*)B, (double*)C, N);
   for(int i = 0; i < N; i++)
     for(int j = 0; j < N; j++)
-      EXPECT_DOUBLE_EQ(UC(i,j), C[i][j]);
-  //  
+      ASSERT_DOUBLE_EQ(UC(i,j), C[i][j]);
+    
+}
+
+TEST(CppTestSuiteGEMM, boostStatic_gemmT_omp) {
+  
+  // Init
+  const int N = 10;
+  double A[N][N], B[N][N], C[N][N];
+  boost::numeric::ublas::matrix<double> UA(N,N), UB(N,N), UC(N,N);
+  //
+  for(int i = 0; i < N; i++) {
+    for(int j = 0; j < N; j++) {
+      A[i][j] = rand()/double(RAND_MAX);
+      B[i][j] = A[i][j] + 10 * i/double(1+j);
+      UA(i, j) = A[i][j];
+      UB(i, j) = B[i][j];
+    }
+  }
+
+  // Reference
+  UC = prod(UA, UB);
+  
+  // Test
   gemmT_omp<double>((double*)A, (double*)B, (double*)C, N);
   for(int i = 0; i < N; i++)
     for(int j = 0; j < N; j++)
-      EXPECT_DOUBLE_EQ(UC(i,j), C[i][j]);
+      ASSERT_DOUBLE_EQ(UC(i,j), C[i][j]);
+    
 }

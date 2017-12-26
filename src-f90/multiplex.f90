@@ -54,7 +54,7 @@ contains
                 
         do i = 1, n
             do j = 1, n
-                B( (i-1) * n + j ) = A( (j-1) * n + i )
+                B( (j-1) * n + i ) = A( (i-1) * n + j )
             end do
         end do
         
